@@ -11,18 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('role_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('day_hour_id')->references('id')->on('day_hour')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('active')->default(true);
-            $table->string('name', 100);
-            $table->string('lastname', 100);
-            $table->unsignedInteger('dni')->unique();
-            $table->unsignedInteger('phone')->nullable(false);
-            $table->timestamp('phone_verified_at')->nullable();
-            $table->string('password', 50);
-            $table->rememberToken();
+            $table->foreignId('court_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->dateTime('date');
+            $table->boolean('available')->default(false);
+            $table->decimal('price', 10, 2)->default(0.0);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -35,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('shifts');
     }
 };
