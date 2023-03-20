@@ -17,8 +17,8 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->string('name', 100);
             $table->string('lastname', 100);
-            $table->unsignedInteger('dni')->unique();
-            $table->unsignedInteger('phone')->nullable(false);
+            $table->unsignedBigInteger('dni')->unique();
+            $table->unsignedBigInteger('phone')->nullable(false);
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password', 50);
             $table->rememberToken();
