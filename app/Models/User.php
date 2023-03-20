@@ -2,14 +2,12 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
@@ -27,9 +25,7 @@ class User extends Authenticatable
         'lastname',
         'dni',
         'phone',
-        'email',
-        'address',
-        'password',
+        'phone_verified_at'
     ];
 
     /**
@@ -48,7 +44,7 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
     ];
 
     protected function name(): Attribute
@@ -83,26 +79,6 @@ class User extends Authenticatable
         );
     }
 
-    protected function email(): Attribute
-    {
-        return new Attribute(
-            /**
-             * the attribute is set to all lowercase
-             */
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
-    protected function address(): Attribute
-    {
-        return new Attribute(
-            /**
-             * the attribute is set to all lowercase
-             */
-            set: fn ($value) => strtolower($value)
-        );
-    }
-
     /**
      * get the related object
      */
@@ -114,16 +90,8 @@ class User extends Authenticatable
     /**
      * get the related object
      */
-    public function rol(): BelongsTo
+    public function role(): BelongsTo
     {
-        return $this->belongsTo(Rol::class);
-    }
-
-    /**
-     * get the related object
-     */
-    public function shifts(): HasMany
-    {
-        return $this->hasMany(Shift::class);
+        return $this->belongsTo(Role::class);
     }
 }

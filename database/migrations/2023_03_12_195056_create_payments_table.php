@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shift_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->dateTime('date');
             $table->string('method');
+            $table->string('description', 100);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';

@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('establishment_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->decimal('balance',10,2)->default(0.0);
-            $table->string('description',150);
+            $table->decimal('balance', 10, 2)->default(0.0);
+            $table->string('description', 150);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';

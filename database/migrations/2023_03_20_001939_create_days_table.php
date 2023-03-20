@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('establishments', function (Blueprint $table) {
+        Schema::create('days', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50)->nullable(false);
-            $table->string('location',150)->nullable(false);
-            $table->unsignedInteger('phone');
-            $table->string('image_url');
+            $table->boolean('active')->default(true);
+            $table->string('name', 15)->nullable(false);
+            $table->string('description')->nullable();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('establishments');
+        Schema::dropIfExists('days');
     }
 };

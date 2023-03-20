@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('rol_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreign('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->boolean('active')->default(true);
             $table->string('name', 100);
             $table->string('lastname', 100);
             $table->unsignedInteger('dni')->unique();
             $table->unsignedInteger('phone')->nullable(false);
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('address', 250);
+            $table->timestamp('phone_verified_at')->nullable();
             $table->string('password', 50);
             $table->rememberToken();
             $table->engine = 'InnoDB';

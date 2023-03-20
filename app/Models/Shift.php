@@ -5,31 +5,32 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Shift extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'active',
-        'modified_at',
+        'date',
+        'available',
+        'price',
+        'modified_at'
     ];
 
     /**
      * get the related object
      */
-    public function shift(): BelongsTo
+    public function dayHour(): BelongsTo
     {
-        return $this->belongsTo(Shift::class);
+        return $this->belongsTo(DayHour::class);
     }
 
     /**
      * get the related object
      */
-    public function establishment(): BelongsTo
+    public function account(): BelongsTo
     {
-        return $this->belongsTo(Establishment::class);
+        return $this->belongsTo(Account::class);
     }
 
     /**
@@ -38,13 +39,5 @@ class Shift extends Model
     public function court(): BelongsTo
     {
         return $this->belongsTo(Court::class);
-    }
-
-    /**
-     * get the related object
-     */
-    public function payments(): HasMany
-    {
-        return $this->hasMany(Payment::class);
     }
 }

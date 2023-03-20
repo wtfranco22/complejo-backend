@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('establishment_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('day_hour_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('court_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('active');
             $table->dateTime('date');
+            $table->boolean('available')->default(false);
+            $table->decimal('price', 10, 2)->default(0.0);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';

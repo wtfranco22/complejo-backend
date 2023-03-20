@@ -5,15 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Account extends Model
+class Hour extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'balance',
+        'active',
+        'hour',
         'description',
         'modified_at'
     ];
@@ -31,24 +32,16 @@ class Account extends Model
     /**
      * get the related object
      */
-    public function user(): BelongsTo
+    public function days(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(Day::class, 'day_hour')->using(DayHour::class);
     }
 
     /**
      * get the related object
      */
-    public function payments(): HasMany
+    public function shifts(): HasManyThrough
     {
-        return $this->hasMany(Payment::class);
-    }
-
-    /**
-     * get the related object
-     */
-    public function shifts(): HasMany
-    {
-        return $this->hasMany(Shift::class);
+        return $this->hasManyThrough(Shift::class, DayHour::class);
     }
 }
