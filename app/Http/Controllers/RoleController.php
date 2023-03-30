@@ -5,22 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
-class RolController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $role = Role::all();
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Listado de roles',
+            'role' => $role
+        ]);
     }
 
     /**
@@ -28,38 +25,60 @@ class RolController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required'
+        ]);
+        $role = new Role();
+        $role->name = $request->name;
+        $role->description = $request->description;
+        $role->save();
+        return response()->json([
+            'status' => 1,
+            'msg' => '¡Registrado con exito!'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
-    {
-        //
+        $role = Role::with('users')->find($id);
+        if (isset($role->id)) {
+            $data = [
+                'status' => 1,
+                'msg' => 'Datos del rol',
+                'role' => $role
+            ];
+        } else {
+            $data = [
+                'status' => 0,
+                'msg' => 'Error, rol no encontrado'
+            ];
+        }
+        return response()->json([$data]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, $id)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Role $role)
-    {
-        //
+        $role = Role::find($id);
+        if (isset($role->id)) {
+            $role->name = isset($request->name) ? $request->name : $role->name;
+            $role->description = isset($request->description) ? $request->description : $role->description;
+            $data = [
+                'status' => 1,
+                'msg' => '¡Actualizado con exito!'
+            ];
+        } else {
+            $data = [
+                'status' => 0,
+                'msg' => 'Error, rol no encontrado'
+            ];
+        }
+        return response()->json([$data]);
     }
 }

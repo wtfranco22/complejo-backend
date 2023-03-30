@@ -12,15 +12,12 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $payments = Payment::all();
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Lista de pagos',
+            'payments' => $payments
+        ]);
     }
 
     /**
@@ -28,38 +25,40 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'method' => 'required',
+            'account_id' => 'required'
+        ]);
+        $payment = new Payment();
+        $payment->account_id = $request->account_id;
+        $payment->method = $request->method;
+        $payment->description = $request->description;
+        $payment->save();
+        return response()->json([
+            'status' => 1,
+            'msg' => '¡Registrado con exito!'
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Payment $payment)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Payment $payment)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Payment $payment)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Payment $payment)
-    {
-        //
+        $payment = Payment::find($id);
+        if (isset($payment->id)) {
+            $payment = Payment::find($id)->with('account');
+            $data = [
+                'status' => 1,
+                'msg' => 'Datos del pago',
+                'payment' => $payment
+            ];
+        } else {
+            $data = [
+                'status' => 0,
+                'msg' => 'Error, pagoo no encontrado'
+            ];
+        }
+        return response()->json($data);
     }
 }
