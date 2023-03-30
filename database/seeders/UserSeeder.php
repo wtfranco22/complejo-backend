@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
@@ -19,7 +20,7 @@ class UserSeeder extends Seeder
         $persona1->active = true;
         $persona1->dni = 12345678901;
         $persona1->phone = 5492996017699;
-        $persona1->password = 'complejocenter';
+        $persona1->password = Hash::make('complejocenter');
         $persona1->save();
 
         $persona2 = new User();
@@ -29,7 +30,7 @@ class UserSeeder extends Seeder
         $persona2->active = true;
         $persona2->dni = 11222333;
         $persona2->phone = 5492996017699;
-        $persona2->password = 'jonarios';
+        $persona2->password = Hash::make('jonarios');
         $persona2->save();
 
         $persona3 = new User();
@@ -39,7 +40,7 @@ class UserSeeder extends Seeder
         $persona3->active = true;
         $persona3->dni = 33222111;
         $persona3->phone = 5492996017699;
-        $persona3->password = 'francorodriguez';
+        $persona3->password = Hash::make('francorodriguez');
         $persona3->save();
 
         $persona4 = new User();
@@ -49,7 +50,7 @@ class UserSeeder extends Seeder
         $persona4->active = true;
         $persona4->dni = 12123123;
         $persona4->phone = 5492996017699;
-        $persona4->password = 'clienteplus';
+        $persona4->password = Hash::make('clienteplus');
         $persona4->save();
     }
 }
