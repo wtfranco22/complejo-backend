@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('dni')->unique();
             $table->unsignedBigInteger('phone')->nullable(false);
             $table->timestamp('phone_verified_at')->nullable();
-            $table->string('password', 50);
+            $table->string('password', 250);
             $table->rememberToken();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
