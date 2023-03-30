@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('payments', function (Blueprint $table) {
+        Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('shift_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('day_hour_id')->references('id')->on('day_hour')->cascadeOnUpdate()->restrictOnDelete();
             $table->foreignId('account_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('court_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->dateTime('date');
-            $table->string('method');
+            $table->boolean('available')->default(false);
+            $table->decimal('price', 10, 2)->default(0.0);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payments');
+        Schema::dropIfExists('shifts');
     }
 };

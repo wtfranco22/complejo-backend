@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('shifts', function (Blueprint $table) {
+        Schema::create('hours', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('establishment_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('court_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->boolean('active');
-            $table->dateTime('date');
+            $table->boolean('active')->default(true);
+            $table->time('hour')->nullable(false);
+            $table->string('description')->nullable();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('shifts');
+        Schema::dropIfExists('hours');
     }
 };

@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courts', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('establishment_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->boolean('active')->default(true);
-            $table->string('name',50)->nullable(false);
-            $table->string('description',100);
-            $table->string('colour',25);
+            $table->string('name', 100);
+            $table->string('lastname', 100);
+            $table->unsignedBigInteger('dni')->unique();
+            $table->unsignedBigInteger('phone')->nullable(false);
+            $table->timestamp('phone_verified_at')->nullable();
+            $table->string('password', 50);
+            $table->rememberToken();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -30,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courts');
+        Schema::dropIfExists('users');
     }
 };

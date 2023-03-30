@@ -11,12 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('days', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->foreignId('establishment_id')->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->decimal('balance',10,2)->default(0.0);
-            $table->string('description',150);
+            $table->boolean('active')->default(true);
+            $table->string('name', 15)->nullable(false);
+            $table->string('description')->nullable();
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('days');
     }
 };

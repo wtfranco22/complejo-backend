@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('establishments', function (Blueprint $table) {
+        Schema::create('courts', function (Blueprint $table) {
             $table->id();
-            $table->string('name',50)->nullable(false);
-            $table->string('location',150)->nullable(false);
-            $table->unsignedInteger('phone');
+            $table->boolean('active')->default(true);
+            $table->timestamp('inactive_at')->nullable();
+            $table->timestamp('active_at')->nullable();
+            $table->string('name', 50)->nullable(false);
             $table->string('image_url');
+            $table->string('description', 150);
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('establishments');
+        Schema::dropIfExists('courts');
     }
 };

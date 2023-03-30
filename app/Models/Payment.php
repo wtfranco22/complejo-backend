@@ -11,17 +11,10 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
-        'date',
-        'method'
+        'method',
+        'description',
+        'created_at'
     ];
-
-    /**
-     * get the related object
-     */
-    public function shift(): BelongsTo
-    {
-        return $this->belongsTo(Shift::class);
-    }
 
     /**
      * get the related object

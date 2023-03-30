@@ -5,17 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
-class Establishment extends Model
+class Day extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'active',
         'name',
-        'location',
-        'phone',
-        'image_url'
+        'description',
+        'modified_at'
     ];
 
     protected function name(): Attribute
@@ -34,7 +35,7 @@ class Establishment extends Model
         );
     }
 
-    protected function location(): Attribute
+    protected function description(): Attribute
     {
         return new Attribute(
             /**
@@ -47,24 +48,16 @@ class Establishment extends Model
     /**
      * get the related object
      */
-    public function accounts(): HasMany
+    public function hours(): BelongsToMany
     {
-        return $this->hasMany(Account::class);
+        return $this->belongsToMany(Hour::class, 'day_hour')->using(DayHour::class);
     }
 
     /**
      * get the related object
      */
-    public function shifts(): HasMany
+    public function shifts(): HasManyThrough
     {
-        return $this->hasMany(Shift::class);
-    }
-
-    /**
-     * get the related object
-     */
-    public function courts(): HasMany
-    {
-        return $this->hasMany(Court::class);
+        return $this->hasManyThrough(Shift::class, DayHour::class);
     }
 }
