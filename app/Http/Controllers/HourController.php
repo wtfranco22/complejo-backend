@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 class HourController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listado de las horas de trabajo
+     * @return Response
      */
     public function index()
     {
+        // $hours es la coleccion de elementos Hour
         $hours = Hour::all();
         return response()->json([
             'status' => 1,
@@ -21,17 +23,20 @@ class HourController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Agregamos nuevas horas de trabajo
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
+        // $hour es un elemento Hour que contiene los datos de la nueva hora de atencion
         $request->validate([
             'hour' => 'required'
         ]);
         $hour = new Hour();
         $hour->name = $request->name;
         $hour->active = true;
-        $hour->description = isset($request->description) ? $request->description : null;
+        $hour->description = isset($request->description) ? $request->description : null; // por defecto agregamos el valor null
         $hour->save();
         return response()->json([
             'status' => 1,
@@ -40,10 +45,17 @@ class HourController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Actualizamos el estado de la hora y/o la descripcion
+     * @param  Request $id
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
+        /**
+         * $hour es un elemento Hour encontrado por su id $id
+         * $data es el mensaje informativo del proceso para el cliente
+         */
         $hour = Hour::find($id);
         if (isset($hour->id)) {
             $hour->active = isset($request->active) ? $request->active : $hour->active;
@@ -52,28 +64,6 @@ class HourController extends Controller
             $data = [
                 'status' => 1,
                 'msg' => '¡Actualizado con exito!'
-            ];
-        } else {
-            $data = [
-                'status' => 0,
-                'msg' => 'Error, Hora no encontrada'
-            ];
-        }
-        return response()->json($data);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $hour = Hour::find($id);
-        if (isset($hour->id)) {
-            $hour->active = false;
-            $hour->save();
-            $data = [
-                'status' => 1,
-                'msg' => '¡Hora deshabilitada!'
             ];
         } else {
             $data = [
