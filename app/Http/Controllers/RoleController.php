@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 class RoleController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Listado de los roles del sistema
+     * @return Response
      */
     public function index()
     {
+        // $role es la coleccion de elementos Role
         $role = Role::all();
         return response()->json([
             'status' => 1,
@@ -21,10 +23,13 @@ class RoleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Agregamos nuevo rol de trabajo al sistema
+     * @param Request $request
+     * @return Response
      */
     public function store(Request $request)
     {
+        // $role es un elemento Role que contiene los datos del nuevo rol de trabajo
         $request->validate([
             'name' => 'required',
             'description' => 'required'
@@ -40,31 +45,17 @@ class RoleController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $role = Role::with('users')->find($id);
-        if (isset($role->id)) {
-            $data = [
-                'status' => 1,
-                'msg' => 'Datos del rol',
-                'role' => $role
-            ];
-        } else {
-            $data = [
-                'status' => 0,
-                'msg' => 'Error, rol no encontrado'
-            ];
-        }
-        return response()->json([$data]);
-    }
-
-    /**
-     * Update the specified resource in storage.
+     * Actualizamos el nombre y/o descripcion del rol
+     * @param  Request $id
+     * @param int $id
+     * @return Response
      */
     public function update(Request $request, $id)
     {
+        /**
+         * $role es un elemento Role encontrado por su id $id
+         * $data es el mensaje informativo del proceso para el cliente
+         */
         $role = Role::find($id);
         if (isset($role->id)) {
             $role->name = isset($request->name) ? $request->name : $role->name;
