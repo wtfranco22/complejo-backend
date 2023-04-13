@@ -19,7 +19,7 @@ class UserSeeder extends Seeder
         $persona1->lastname = 'center';
         $persona1->active = true;
         $persona1->dni = 12345678901;
-        $persona1->email = "francofranco_96@hotmail.com";
+        $persona1->email = "examplo@hotmail.com";
         $persona1->phone = 5492996017699;
         $persona1->password = Hash::make('complejocenter');
         $persona1->save();
