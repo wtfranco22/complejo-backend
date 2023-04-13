@@ -19,7 +19,8 @@ return new class extends Migration
             $table->string('lastname', 100);
             $table->unsignedBigInteger('dni')->unique();
             $table->unsignedBigInteger('phone')->nullable(false);
-            $table->timestamp('phone_verified_at')->nullable();
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
             $table->string('password', 250);
             $table->rememberToken();
             $table->engine = 'InnoDB';
