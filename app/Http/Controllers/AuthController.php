@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Support\Facades\URL;
 
 class AuthController extends Controller
 {
@@ -25,6 +27,7 @@ class AuthController extends Controller
             'name' => 'required',
             'lastname' => 'required',
             'dni' => 'required',
+            'email' => 'required',
             'phone' => 'required',
             'password' => 'required|confirmed'
         ]);
@@ -35,9 +38,11 @@ class AuthController extends Controller
         $user->dni = $request->dni;
         $user->name = $request->name;
         $user->lastname = $request->lastname;
+        $user->email = $request->email;
         $user->phone = $request->phone;
         $user->password = Hash::make($request->password);
         $user->save();
+        $user->notify(new VerifyEmail());
         return response()->json([
             'status' => 1,
             'msg' => 'registrado con exito'
@@ -52,17 +57,17 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'phone' => 'required',
+            'email' => 'required',
             'password' => 'required'
         ]);
-        if (!Auth::attempt($request->only('phone', 'password'))) {
+        if (!Auth::attempt($request->only('email', 'password'))) {
             // utilizamos la autenticacion que ofrece sanctum
             $data = [
                 'status' => 0,
                 'msg' => 'Acceso denegado'
             ];
         } else {
-            $user = User::where('phone', $request->phone)->firstOrFail();
+            $user = User::where('email', $request->email)->firstOrFail();
             $token = $user->createToken('auth_token')->plainTextToken;
             $data = [
                 'status' => 1,
@@ -98,5 +103,58 @@ class AuthController extends Controller
             'status' => 1,
             'msg' => 'Cierre de sesion'
         ]);
+    }
+
+    /**
+     * Verificamos la cuenta del usuario a traves del correo
+     * @param int $id
+     * @return Response
+     */
+    public function verifyUser($id)
+    {
+        if (time() < request('expires')) {
+            // verificamos si el link no haya expirado
+            if (URL::hasValidSignature(request())) {
+                // verificamos que el link ingresado no sea manipulado, que siga intacta la firma 
+                $user = User::findOrFail($id);
+                if (!$user->hasVerifiedEmail()) {
+                    // verificamos que el usuario ya tenga el email validado
+                    if ($user->markEmailAsVerified()) {
+                        // validamos email e iniciamos sesion, generamos token
+                        Auth::login($user);
+                        $token = $user->createToken('auth_toekn')->plainTextToken;
+                        /**
+                         * FALTA CREAR CUENTA AL TENER CUENTA VALIDADA
+                         */
+                        $data = [
+                            'status' => 1,
+                            'msg' => 'Email validado',
+                            'token' => $token
+                        ];
+                    } else {
+                        $data = [
+                            'status' => 0,
+                            'msg' => 'Error de validacion de email'
+                        ];
+                    }
+                } else {
+                    $data = [
+                        'status' => 0,
+                        'msg' => 'Error Email ya verificado'
+                    ];
+                }
+            } else {
+                $data = [
+                    'status' => 0,
+                    'msg' => 'Error de enlace ingresado'
+                ];
+            }
+        }else{
+            $data = [
+                'status' => 0,
+                'msg' => 'El link ya ha expirado'
+            ];
+        }
+        return response()->json($data);
     }
 }
