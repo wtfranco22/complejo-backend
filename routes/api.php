@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login', [AuthController::class, 'login']);
 Route::post('register', [AuthController::class, 'register']);
 Route::get('shifts/{date}', [ShiftController::class, 'freeShifts']);
+Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verifyUser'])->name('verification.verify');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('profile', [AuthController::class, 'profile']);
@@ -41,7 +42,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('roles', RoleController::class)->except('create', 'edit', 'destroy');
     Route::resource('payments', PaymentController::class)->only('index', 'store', 'show');
     Route::resource('accounts', AccountController::class)->only('index', 'show', 'update');
-    Route::get('my-payments',[UserController::class,'myPayments']);
-    Route::get('my-shifts',[UserController::class,'myShifts']);
-    Route::post('cancel-shift',[ShiftController::class,'cancelShift']);
-});;
+    Route::get('my-payments', [UserController::class, 'myPayments']);
+    Route::get('my-shifts', [UserController::class, 'myShifts']);
+    Route::post('cancel-shift', [ShiftController::class, 'cancelShift']);
+});
