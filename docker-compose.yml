@@ -1,6 +1,7 @@
 version: '3'
 services:
     laravel.test:
+        container_name: complejocenter
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
@@ -55,6 +56,13 @@ services:
                 - '-p${DB_PASSWORD}'
             retries: 3
             timeout: 5s
+    phpmyadmin: 
+        image: phpmyadmin
+        restart: always
+        ports:
+            - 8080:80
+        environment:
+            - PMA_ARBITRARY=1
     redis:
         image: 'redis:alpine'
         ports:
