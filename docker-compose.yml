@@ -1,6 +1,7 @@
 version: '3'
 services:
     laravel.test:
+        container_name: complejocenter
         build:
             context: ./vendor/laravel/sail/runtimes/8.2
             dockerfile: Dockerfile
