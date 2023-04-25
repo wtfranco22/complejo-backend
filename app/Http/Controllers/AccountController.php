@@ -25,33 +25,45 @@ class AccountController extends Controller
 
     /**
      * Agregamos una nueva cuenta al momento de verificar sus datos el usuario
+     * @param Request $request
      * @return Response
      */
-    public function store()
+    public function store(Request $request)
     {
         /**
          * $user es un elemento User registrado en el sistema
          * $account es un elemento Account que contiene los datos para una cuenta de un usuario verificado
          * $data es el mensaje informativo del proceso para el cliente
          */
-        $user = User::find(auth()->user()->id);
+        $request->validate([
+            'user_id' => 'required',
+            'code' => 'required'
+        ]);
+        $user = User::find($request->user_id);
         if (isset($user->id)) {
-            $account = new Account();
-            $account->user_id = auth()->user()->id;
-            $account->balance = 0.0;
-            $account->description = 'Cuenta nueva '. date('d-m-Y H:i:s');
-            $account->save();
-            $data = [
-                'status' => 1,
-                'msg' => 'Cuenta verificada'
-            ];
+            if ($request->code == 123) {
+                $account = new Account();
+                $account->user_id = $request->user_id;
+                $account->balance = 0.0;
+                $account->description = isset($request->description) ? $request->description : 'Cuenta nueva';
+                $account->save();
+                $data = [
+                    'status' => 1,
+                    'msg' => 'Cuenta verificada'
+                ];
+            } else {
+                $data = [
+                    'status' => 0,
+                    'msg' => 'Error, codigo invalido'
+                ];
+            }
         } else {
             $data = [
                 'status' => 0,
                 'msg' => 'Error, usuario no encontrado'
             ];
         }
-        return $data;
+        return response()->json($data);
     }
 
     /**
@@ -79,6 +91,22 @@ class AccountController extends Controller
             ];
         }
         return response()->json($data);
+    }
+
+    /**
+     * Validar cuenta es para verificar el usuario y poder comenzar a solicitar turnos
+     * @param Request $request
+     * @return Response
+     */
+    public function validateAccount(Request $request)
+    {
+        $request->validate(['user_phone' => 'required']);
+        $user = User::where('phone', $request->user_phone)->get();
+        return response()->json([
+            'status' => 1,
+            'msg' => 'Usuario encontrado',
+            'user_id' => $user->id
+        ]);
     }
 
     /**

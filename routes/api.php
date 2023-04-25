@@ -32,7 +32,7 @@ Route::post('register', [AuthController::class, 'register']);
 Route::get('shifts/{date}', [ShiftController::class, 'freeShifts']);
 Route::get('email/verify/{id}/{hash}', [AuthController::class, 'verifyUser'])->name('verification.verify');
 
-Route::middleware(['auth:sanctum','verified'])->group(function () {
+Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('profile', [AuthController::class, 'profile']);
     Route::get('logout', [AuthController::class, 'logout']);
     Route::resource('hours', HourController::class);
