@@ -120,16 +120,12 @@ class AuthController extends Controller
                 if (!$user->hasVerifiedEmail()) {
                     // verificamos que el usuario ya tenga el email validado
                     if ($user->markEmailAsVerified()) {
-                        // validamos email e iniciamos sesion, generamos token
-                        Auth::login($user);
-                        $token = $user->createToken('auth_toekn')->plainTextToken;
-                        /**
-                         * FALTA CREAR CUENTA AL TENER CUENTA VALIDADA
-                         */
+                        // validamos email
+                        $account = new AccountController();
+                        $msg = $account->store($user->id);
                         $data = [
-                            'status' => 1,
-                            'msg' => 'Email validado',
-                            'token' => $token
+                            'status' => $msg['status'],
+                            'msg' => $msg['msg']
                         ];
                     } else {
                         $data = [
