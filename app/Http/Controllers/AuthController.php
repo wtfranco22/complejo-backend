@@ -123,12 +123,11 @@ class AuthController extends Controller
                         // validamos email e iniciamos sesion, generamos token
                         Auth::login($user);
                         $token = $user->createToken('auth_toekn')->plainTextToken;
-                        /**
-                         * FALTA CREAR CUENTA AL TENER CUENTA VALIDADA
-                         */
+                        $account = new AccountController();
+                        $msg = $account->store();
                         $data = [
-                            'status' => 1,
-                            'msg' => 'Email validado',
+                            'status' => $msg['status'],
+                            'msg' => $msg['msg'],
                             'token' => $token
                         ];
                     } else {
