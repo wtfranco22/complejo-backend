@@ -72,7 +72,9 @@ class AuthController extends Controller
             $data = [
                 'status' => 1,
                 'access_token' => $token,
-                'token_type' => 'Bearer'
+                'token_type' => 'Bearer',
+                'user' => auth()->user(),
+                'role' => auth()->user()->role->name
             ];
         }
         return response()->json($data);
@@ -87,7 +89,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => 1,
             'msg' => 'Datos del usuario',
-            'user' => auth()->user()
+            'user' => auth()->user(),
+            'role' => auth()->user()->role->name
         ]);
     }
 
