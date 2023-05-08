@@ -160,8 +160,8 @@ class UserController extends Controller
         $user = User::with('account')->find(auth()->user()->id);
         return response()->json([
             'status' => 1,
-            'msg' => 'Pagos realizados',
-            'Payments' => $user->account->shifts
+            'msg' => 'Turnos solicitados',
+            'Shifts' => $user->account->shifts
         ]);
     }
 }
