@@ -102,7 +102,7 @@ class AccountController extends Controller
         switch ($request->reason) {
             case 'payShift':
                 // caso del pago de un turno solicitado por el mismo usuario
-                if (isset(auth()->user()->phone_verified_at)) {
+                if (isset(auth()->user()->email_verified_at)) {
                     // verificamos si el usuario esta verificado
                     if ((auth()->user()->account->balance - $request->price) > -10000) {
                         // verificamos si el usuario excede el limite de deudas
